@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>敏捷核心考点 · 掌上学</title>
+  <style>
+    :root {
+      --bg: #fafaf8;
+      --bg-card: #fff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #666;
+      --text-muted: #999;
+      --accent: #e63232;
+      --accent-light: #fef2f2;
+      --border: #e8e8e6;
+      --tag-bg: #f0f0f0;
+      --tag-text: #555;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06);
+      --radius: 8px;
+      --table-header: #1a1a1a;
+      --table-alt: #fafaf8;
+      --memory-bg: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --bg-card: #1e1e1e;
+      --text-primary: #e8e8e6;
+      --text-secondary: #a0a0a0;
+      --text-muted: #707070;
+      --accent: #ff6b6b;
+      --accent-light: #2a2020;
+      --border: #333;
+      --tag-bg: #2a2a2a;
+      --tag-text: #b0b0b0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+      --table-header: #2a2a2a;
+      --table-alt: #1a1a1a;
+      --memory-bg: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      font-size: 15px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-bottom: 80px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .header-left h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .header .subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      width: 48px;
+      height: 28px;
+      background: var(--tag-bg);
+      border-radius: 14px;
+      position: relative;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      transition: background 0.3s;
+    }
+
+    .theme-toggle::before {
+      content: "☀️";
+      position: absolute;
+      left: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      transition: opacity 0.3s;
+    }
+
+    .theme-toggle::after {
+      content: "🌙";
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .theme-toggle .toggle-knob {
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 22px;
+      height: 22px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    [data-theme="dark"] .theme-toggle {
+      background: #3a3a3a;
+    }
+
+    [data-theme="dark"] .theme-toggle::before {
+      opacity: 0;
+    }
+
+    [data-theme="dark"] .theme-toggle::after {
+      opacity: 1;
+    }
+
+    [data-theme="dark"] .theme-toggle .toggle-knob {
+      transform: translateX(20px);
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--border);
+      z-index: 101;
+    }
+
+    .progress-bar .fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.2s;
+    }
+
+    /* Section Nav */
+    .section-nav {
+      position: sticky;
+      top: 57px;
+      z-index: 99;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .section-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .section-nav ul {
+      display: flex;
+      padding: 10px 16px;
+      gap: 8px;
+      list-style: none;
+      min-width: max-content;
+    }
+
+    .section-nav a {
+      display: block;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: var(--tag-bg);
+      border-radius: 20px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .section-nav a:hover,
+    .section-nav a.active {
+      background: var(--text-primary);
+      color: var(--bg);
+    }
+
+    /* Main Content */
+    .content {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    /* Chapter */
+    .chapter {
+      margin-bottom: 32px;
+      scroll-margin-top: 120px;
+    }
+
+    .chapter-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .chapter-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+    }
+
+    /* Topic */
+    .topic {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .topic-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .topic-title::before {
+      content: "◆";
+      color: var(--accent);
+      font-size: 0.7rem;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .topic ul {
+      list-style: none;
+      padding-left: 16px;
+    }
+
+    .topic li {
+      position: relative;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      padding-left: 14px;
+      line-height: 1.5;
+    }
+
+    .topic li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .topic li strong {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* Nested lists */
+    .topic ul ul {
+      margin-top: 6px;
+      padding-left: 12px;
+    }
+
+    .topic ul ul li::before {
+      content: "–";
+    }
+
+    /* Highlight box */
+    .highlight-box {
+      background: var(--accent-light);
+      border-left: 3px solid var(--accent);
+      padding: 12px 14px;
+      margin: 12px 0;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .highlight-box p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Key Points Table */
+    .key-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.82rem;
+    }
+
+    .key-table th {
+      background: var(--table-header);
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 500;
+    }
+
+    .key-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      background: var(--bg-card);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .key-table tr:nth-child(even) td {
+      background: var(--table-alt);
+    }
+
+    .key-table td:first-child {
+      color: var(--accent);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Memory section */
+    .memory-section {
+      background: var(--memory-bg);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin: 24px 0;
+      transition: background 0.3s;
+    }
+
+    .memory-section h3 {
+      font-size: 1rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .memory-list {
+      list-style: none;
+    }
+
+    .memory-list li {
+      font-size: 0.88rem;
+      margin-bottom: 10px;
+      padding-left: 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .memory-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #4ade80;
+    }
+
+    .memory-list li strong {
+      color: #fbbf24;
+    }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: var(--text-primary);
+      color: var(--bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer stats */
+    .stats {
+      text-align: center;
+      padding: 24px 16px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .stats span {
+      margin: 0 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+
+  <header class="header">
+    <div class="header-left">
+      <h1>📚 敏捷核心考点</h1>
+      <div class="subtitle">PMP 备考指南 · 高频知识点速记</div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+      <span class="toggle-knob"></span>
+    </button>
+  </header>
+
+  <nav class="section-nav">
+    <ul>
+      <li><a href="#ch1">敏捷核心</a></li>
+      <li><a href="#ch2">沟通干系人</a></li>
+      <li><a href="#ch3">范围变更</a></li>
+      <li><a href="#ch4">进度成本</a></li>
+      <li><a href="#ch5">风险质量</a></li>
+      <li><a href="#ch6">团队冲突</a></li>
+      <li><a href="#ch7">采购收尾</a></li>
+      <li><a href="#ch8">关键词表</a></li>
+    </ul>
+  </nav>
+
+  <main class="content">
+    <!-- Chapter 1: Agile Core -->
+    <section class="chapter" id="ch1">
+      <h2 class="chapter-title"><span class="chapter-num">1</span>敏捷核心考点</h2>
+
+      <div class="topic">
+        <h3 class="topic-title">产品负责人 PO 的职责</h3>
+        <ul>
+          <li>PO 是<strong>客户、业务与开发团队之间的桥梁</strong></li>
+          <li>需求不清、用户故事不明确时，应<strong>召集团队与 PO 协作澄清</strong></li>
+          <li>PO 关注：<strong>产品价值、需求优先级、客户反馈</strong>，而非主要关注成本</li>
+          <li>产品需求不明确时 → 先明确产品愿景，统一方向，再细化需求</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">产品待办事项列表 Product Backlog</h3>
+        <ul>
+          <li>动态文档，记录、跟踪和管理产品需求及变更</li>
+          <li>项目暂停后恢复 → 先回顾剩余待办，重新确认优先级和环境</li>
+          <li>待办事项梳理会议：帮助跨地域、跨团队同步用户故事和需求变更</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">用户故事与接受标准</h3>
+        <ul>
+          <li>用户故事需足够细节，支持团队开发所需功能</li>
+          <li>故事过大、估算不准 → <strong>拆分为更小故事再估算</strong></li>
+          <li>价值判断应与业务目标、项目目标和战略目标对齐</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">完成的定义 DoD</h3>
+        <ul>
+          <li>统一团队与干系人对"完成"的理解</li>
+          <li><strong>作用</strong>：保证故事完整性、提高交付质量、避免期望落差、确保合规</li>
+          <li>客户认为成果未达预期 → 往往是 <strong>DoD 或验收标准未定义好</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">信息发射源</h3>
+        <ul>
+          <li>看板、燃尽图、任务墙、仪表盘等</li>
+          <li><strong>作用</strong>：可视化项目状态、展示进度/风险/问题、明确范围变更</li>
+          <li>敏捷强调：<strong>透明、及时、可视化沟通</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">敏捷团队与仆人式领导</h3>
+        <ul>
+          <li>团队应<strong>自组织、自管理</strong>，对工作进度负责</li>
+          <li>及时更新看板，保证信息反映真实状态</li>
+          <li>项目经理作为仆人式领导应：
+            <ul>
+              <li>授权团队、移除障碍、促进讨论</li>
+              <li>提醒团队责任、<strong>避免微观管理</strong></li>
+              <li>营造安全、信任的环境</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">MVP 与增量交付</h3>
+        <ul>
+          <li>第一次迭代优先交付 <strong>MVP</strong>（最小可行产品）</li>
+          <li>MVP 用最小成本展示核心价值，<strong>尽早获得反馈</strong></li>
+          <li>增量交付适合：需快速上市、保留核心功能按期交付、后续逐步增加功能</li>
+          <li>动态范围合同：固定时间和预算内，通过迭代交付最高价值范围</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">敏捷质量与绩效</h3>
+        <ul>
+          <li>可交付成果<strong>缺陷数量</strong>可反映交付质量</li>
+          <li>单位工作量错误更少的团队表现更好</li>
+          <li>冲刺评审关注<strong>产品增量和团队成果</strong>，不评价个人表现</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Chapter 2: Communication & Stakeholders -->
+    <section class="chapter" id="ch2">
+      <h2 class="chapter-title"><span class="chapter-num">2</span>沟通与干系人管理</h2>
+
+      <div class="topic">
+        <h3 class="topic-title">干系人识别与分析</h3>
+        <ul>
+          <li>新发现干系人时，应更新：
+            <ul>
+              <li>干系人登记册</li>
+              <li>干系人参与计划</li>
+            </ul>
+          </li>
+          <li>干系人登记册记录：角色、权力、利益、影响、期望等</li>
+          <li>干系人分析：识别权力、利益、影响力和期望，制定沟通策略</li>
+          <li>高影响力干系人提出变更 → <strong>不能直接处理，先完善干系人识别和管理基础</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">干系人期望管理</h3>
+        <ul>
+          <li>干系人需求不一致 → 通过分析、征求意见、谈判平衡需求</li>
+          <li>用户角色 Persona：帮助理解不同用户群体的需求和期望</li>
+          <li>干系人质疑项目价值 → 说明项目使命、愿景、目标、预期成果及战略关系</li>
+          <li>高层关注<strong>战略价值</strong>，强调项目目标与组织战略目标一致</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">沟通管理计划</h3>
+        <ul>
+          <li>规定：沟通对象、方式、频率、内容、发布渠道、是否确认收到</li>
+          <li>没收到报告、供应商未回复、信息未传达 → 通常是<strong>沟通管理计划问题</strong></li>
+          <li>向供应商发送关键信息时，应<strong>确认对方已收到</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">沟通方式</h3>
+        <ul>
+          <li><strong>互动沟通</strong>：会议、电话、视频、即时通讯 → 实时多方交流</li>
+          <li><strong>推式沟通</strong>：邮件、报告、备忘录 → 能发送但不能保证理解</li>
+          <li><strong>拉式沟通</strong>：门户网站、知识库、内网 → 大量复杂信息或大量受众</li>
+          <li>分散团队需要统计反馈 → <strong>调查问卷优于邮件和会议</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">跨地域与跨文化团队沟通</h3>
+        <ul>
+          <li>跨时区协作 → 合理规划任务，<strong>减少跨时区依赖</strong></li>
+          <li>共址但工作时间不同 → 寻找共同重叠时间安排会议</li>
+          <li>跨文化沟通障碍 → 建立共同目标和共同理解</li>
+          <li>跨国敏捷团队 → 需求或接受标准变更应通过待办事项梳理同步所有团队</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Chapter 3: Scope & Change -->
+    <section class="chapter" id="ch3">
+      <h2 class="chapter-title"><span class="chapter-num">3</span>范围、需求与变更管理</h2>
+
+      <div class="topic">
+        <h3 class="topic-title">启动阶段需求</h3>
+        <ul>
+          <li>启动阶段明确高层次业务需求，为项目章程和后续规划奠定基础</li>
+          <li>需求不明确 → 先澄清高级别需求和产品待办列表</li>
+          <li>业务需求应描述项目<strong>要解决的核心问题和预期价值</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">范围说明书</h3>
+        <ul>
+          <li>定义项目边界、可交付成果、验收标准、制约因素、假设条件</li>
+          <li>项目范围与产品范围不同：前者是项目产生的工作，后者是产品/服务的特性</li>
+          <li>范围说明书是<strong>整体变更控制的基准</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">范围蔓延与镀金</h3>
+        <ul>
+          <li>范围蔓延：未经批准添加额外工作 → <strong>拒绝，立即进入整体变更控制</strong></li>
+          <li>镀金：团队主动做范围外工作讨好客户 → 禁止，会导致进度/成本问题</li>
+          <li>客户额外变更 → 必须实施整体变更控制</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">整体变更控制</h3>
+        <ul>
+          <li>所有变更必须<strong>书面记录、评估影响、获得批准</strong></li>
+          <li>变更日志跟踪变更请求的状态和历史</li>
+          <li>批准或拒绝变更时需考虑：对范围、进度、成本、质量的影响</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">敏捷中的变更</h3>
+        <ul>
+          <li>敏捷欢迎变更，即使在开发后期也欢迎</li>
+          <li>迭代评审会上展示已完成功能，收集反馈调整待办事项</li>
+          <li>未在当前迭代中实现的变更 → <strong>移入产品待办列表重新排优先级</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Chapter 4: Schedule & Cost -->
+    <section class="chapter" id="ch4">
+      <h2 class="chapter-title"><span class="chapter-num">4</span>进度与成本管理</h2>
+
+      <div class="topic">
+        <h3 class="topic-title">关键路径法</h3>
+        <ul>
+          <li>关键路径是项目中最长的路径，决定<strong>最短完成时间</strong></li>
+          <li>关键路径上的活动<strong>没有浮动时间</strong></li>
+          <li>压缩工期选项：
+            <ul>
+              <li><strong>赶工</strong>：加资源、加成本（适用于关键路径活动）</li>
+              <li><strong>快速跟进</strong>：并行执行有依赖关系的活动、加风险</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">三点估算</h3>
+        <ul>
+          <li>适用于估算不确定性较大的活动</li>
+          <li>公式：<strong>（乐观 + 4×最可能 + 悲观）/ 6</strong></li>
+          <li>乐观(O)、最可能(M)、悲观(P) 三点估计</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">挣值管理 EVM</h3>
+        <ul>
+          <li><strong>CV</strong>（成本偏差）= EV - AC；CV > 0 优于预算</li>
+          <li><strong>SV</strong>（进度偏差）= EV - PV；SV > 0 优于进度</li>
+          <li><strong>CPI</strong>（成本绩效指数）= EV / AC；< 1 表示超支</li>
+          <li><strong>SPI</strong>（进度绩效指数）= EV / PV；< 1 表示延误</li>
+          <li>ETC = EAC - AC（完工尚需估算）</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">成本超支处理</h3>
+        <ul>
+          <li>展示绩效数据 → 提出<strong>纠正措施</strong> → 预防未来超支</li>
+          <li>分析原因：范围蔓延、资源效率低、估算不准</li>
+          <li>考虑：重新规划、调整范围、申请额外资源</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Chapter 5: Risk & Quality -->
+    <section class="chapter" id="ch5">
+      <h2 class="chapter-title"><span class="chapter-num">5</span>风险与质量管理</h2>
+
+      <div class="topic">
+        <h3 class="topic-title">风险识别与分析</h3>
+        <ul>
+          <li>风险是一种<strong>不确定的事件或情况</strong>，可能发生也可能不发生</li>
+          <li>已发生的问题 → <strong>问题日志</strong>，不再是风险</li>
+          <li>风险分析：<strong>概率影响矩阵</strong>确定风险优先级</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">蒙特卡洛分析</h3>
+        <ul>
+          <li>模拟大量随机场景，计算<strong>完成概率、超支概率</strong></li>
+          <li>回答"我们有多少把握按时完成？"</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">决策树分析</h3>
+        <ul>
+          <li>适用于<strong>多方案选择，考虑概率和收益</strong></li>
+          <li>计算每个方案的<strong>预期货币价值 EMV</strong></li>
+          <li>EMV = Σ（概率 × 收益）</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">质量问题处理</h3>
+        <ul>
+          <li>可交付成果不合格 → <strong>更新问题日志，实施解决方案</strong></li>
+          <li>先分析原因，再采取纠正措施</li>
+          <li>根本原因分析：鱼骨图、5 Why、帕累托图</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">质量保证 vs 质量控制</h3>
+        <ul>
+          <li><strong>质量保证</strong>：过程审查，确保遵循过程 → 预防缺陷</li>
+          <li><strong>质量控制</strong>：成果检查，识别缺陷 → 发现问题</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Chapter 6: Team & Conflict -->
+    <section class="chapter" id="ch6">
+      <h2 class="chapter-title"><span class="chapter-num">6</span>团队建设与冲突管理</h2>
+
+      <div class="topic">
+        <h3 class="topic-title">塔克曼阶梯</h3>
+        <ul>
+          <li><strong>形成期</strong>：团队初次见面，了解目标和角色</li>
+          <li><strong>震荡期</strong>：冲突显现，需要领导引导</li>
+          <li><strong>规范期</strong>：建立信任，协作顺畅</li>
+          <li><strong>成熟期</strong>：高绩效，自我管理</li>
+          <li>项目结束/人员变动可能回到早期阶段</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">冲突管理策略</h3>
+        <ul>
+          <li><strong>撤退/回避</strong>：暂时离开，让双方冷静（不是最佳）</li>
+          <li><strong>缓和/包容</strong>：强调一致，忽略差异</li>
+          <li><strong>妥协/调解</strong>：双方各让一步</li>
+          <li><strong>强迫/命令</strong>：一方赢，一方输</li>
+          <li><strong>合作/解决问题</strong>：最佳方案，双方都满意</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">团队章程与规则</h3>
+        <ul>
+          <li>核心原则：对事不对人、聚焦解决方案、尊重沟通、明确行为准则</li>
+          <li>应提前建立互动规则</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">新成员加入</h3>
+        <ul>
+          <li>需要紧密协作时 → 组织全体团队研讨会</li>
+          <li>目的：知识转移、建立关系、对齐目标、营造协作环境</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">激励团队</h3>
+        <ul>
+          <li>采取激励措施前 → 先了解团队成员的需求、愿望和动机</li>
+          <li>跨国团队破冰 → 通过团队自我评估引导成员表达期望</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Chapter 7: Procurement & Close -->
+    <section class="chapter" id="ch7">
+      <h2 class="chapter-title"><span class="chapter-num">7</span>采购与项目收尾</h2>
+
+      <div class="topic">
+        <h3 class="topic-title">采购流程</h3>
+        <ul>
+          <li>选择新供应商 → 遵循组织和项目规定的<strong>正式采购流程</strong></li>
+          <li>与供应商谈判前 → 了解合同政策、法律和公司标准</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">采购管理计划</h3>
+        <ul>
+          <li>规定采购过程中的活动、角色和可交付成果</li>
+          <li>相关方对采购可交付成果有不同意见 → 参考采购管理计划</li>
+          <li>发起人询问为何内部开发 → 查看采购管理计划中的<strong>自制或外购决策</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">供应商沟通</h3>
+        <ul>
+          <li>不能只发送邮件 → 还应<strong>确认对方收到</strong></li>
+          <li>供应商未回复导致资源不到位 → 本质是<strong>沟通确认机制不足</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">收尾阶段核心工作</h3>
+        <ul>
+          <li>验收成果 → 移交成果 → 关闭合同 → 归档文件</li>
+          <li>总结经验教训 → 更新组织过程资产 → 释放资源</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">移交运营</h3>
+        <ul>
+          <li>为降低风险 → 提前部署测试版本，让运营团队参与早期发布</li>
+          <li>让运营团队提前熟悉产品，降低正式交接风险</li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">项目结束后的费用</h3>
+        <ul>
+          <li>项目已完成并移交后，客户提出的运营或团队建设费用<strong>不属于项目范围</strong></li>
+          <li>应急储备用于项目内已识别风险，<strong>不应用于项目结束后的运营</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic">
+        <h3 class="topic-title">组织过程资产 OPA</h3>
+        <ul>
+          <li>包括：流程、程序、模板、经验教训、知识库、历史信息</li>
+          <li>项目收尾时应<strong>更新 OPA</strong></li>
+          <li>人员流动频繁时 → 更新 OPA 有助于保持治理连续性</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Chapter 8: Keyword Table -->
+    <section class="chapter" id="ch8">
+      <h2 class="chapter-title"><span class="chapter-num">8</span>常见 PMP 判断关键词</h2>
+
+      <div class="topic" style="overflow-x: auto;">
+        <table class="key-table">
+          <thead>
+            <tr>
+              <th>题干关键词</th>
+              <th>优先考虑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>需求不清、产品方向不明</td><td>澄清产品愿景 / 找 PO / 明确高级别需求</td></tr>
+            <tr><td>用户故事不清</td><td>PO 澄清需求 / 待办事项梳理</td></tr>
+            <tr><td>客户说成果不符合期望</td><td>DoD / 验收标准未定义好</td></tr>
+            <tr><td>干系人质疑项目价值</td><td>说明愿景、使命、战略价值</td></tr>
+            <tr><td>干系人质疑 PM 权威</td><td>项目章程</td></tr>
+            <tr><td>新干系人出现</td><td>更新干系人登记册和参与计划</td></tr>
+            <tr><td>信息没收到、报告未收到</td><td>沟通管理计划</td></tr>
+            <tr><td>项目状态透明化</td><td>信息发射源</td></tr>
+            <tr><td>进度延误需缩短工期</td><td>赶工或快速跟进</td></tr>
+            <tr><td>成本超支</td><td>CPI < 1，展示绩效并提出纠正措施</td></tr>
+            <tr><td>多方案选择，概率和收益</td><td>决策树 / EMV</td></tr>
+            <tr><td>完成概率、超支概率</td><td>蒙特卡洛分析</td></tr>
+            <tr><td>乐观、最可能、悲观</td><td>三点估算</td></tr>
+            <tr><td>风险排序</td><td>概率影响矩阵</td></tr>
+            <tr><td>已发生的问题</td><td>问题日志</td></tr>
+            <tr><td>可交付成果不合格</td><td>更新问题日志，实施解决方案</td></tr>
+            <tr><td>范围变更</td><td>实施整体变更控制</td></tr>
+            <tr><td>选择供应商</td><td>正式采购流程</td></tr>
+            <tr><td>内部开发还是外购</td><td>自制或外购决策</td></tr>
+            <tr><td>项目结束</td><td>收尾、归档、经验教训、释放资源</td></tr>
+            <tr><td>泄露机密</td><td>通知相关方、道歉、纠正</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Memory Version -->
+    <section class="chapter" id="ch9">
+      <h2 class="chapter-title"><span class="chapter-num">★</span>压缩记忆版</h2>
+
+      <div class="memory-section">
+        <h3>📌 10 条核心记忆</h3>
+        <ol class="memory-list">
+          <li><strong>敏捷重价值</strong>：PO 管需求，团队自组织，PM 做仆人式领导</li>
+          <li><strong>需求不清先澄清</strong>：产品愿景、用户故事、接受标准、DoD</li>
+          <li><strong>透明靠信息发射源</strong>：看板、燃尽图、仪表盘</li>
+          <li><strong>变更走流程</strong>：客户额外变更必须实施整体变更控制</li>
+          <li><strong>干系人先识别再管理</strong>：登记册、分析、参与计划、沟通策略</li>
+          <li><strong>沟通问题看沟通管理计划</strong>：未收到、未确认、信息不同步</li>
+          <li><strong>进度压缩两招</strong>：赶工加资源加成本，快速跟进并行加风险</li>
+          <li><strong>风险未发生，问题已发生</strong>：风险用矩阵/蒙特卡洛/决策树；问题进问题日志</li>
+          <li><strong>质量问题先分析原因</strong>：不合格更新问题日志，做根本原因分析</li>
+          <li><strong>收尾要验收、移交、归档、总结、释放资源</strong></li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="stats">
+      <span>📖 共 8 大章节</span>
+      <span>•</span>
+      <span>⏱️ 建议学习时间：30 分钟</span>
+    </div>
+  </main>
+
+  <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('agile-theme') || 'light';
+    if (savedTheme === 'dark') {
+      html.setAttribute('data-theme', 'dark');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('agile-theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('agile-theme', 'dark');
+      }
+    });
+
+    // Progress bar
+    const progressFill = document.getElementById('progressFill');
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      progressFill.style.width = progress + '%';
+
+      backToTop.classList.toggle('visible', scrollTop > 300);
+    });
+
+    backToTop.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Active nav highlighting
+    const sections = document.querySelectorAll('.chapter');
+    const navLinks = document.querySelectorAll('.section-nav a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        if (window.scrollY >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
